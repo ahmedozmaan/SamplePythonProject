@@ -1,0 +1,79 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Admin - Meters / List{% endblock %}
+
+{% block body %}
+    {{ f.meter_search('admin.meters') }}
+    {% if meters.total == 0 %}
+        <h3>No results found</h3>
+
+        {% if request.args.get('q') %}
+            <p>Try limiting or removing your search terms.</p>
+        {% else %}
+            <p>There are no Meters present,
+                you should <a href="{{ url_for('meter.add') }}"> Register Meters</a>.</p>
+        {% endif %}
+    {% else %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="col-header">
+                    {{ items.sort('sequence_number', 'Meter') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('phone_number', 'Phone') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('customer_name', 'Customer Name') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('branch', 'Branch') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('online', 'Online') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('power', 'Power') }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for meter in meters.items %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('admin.meters_detail', id=meter.id) }}">
+                            <h4 class="media-heading">{{ meter.serial_number }}</h4>
+
+                            <p class="text-muted">{{ meter.sequence_number }}</p>
+                        </a>
+                    </td>
+                    <td>{{ meter.phone_number }}</td>
+                    <td>{{ meter.customer_name }}</td>
+                    <td>{{ meter.branch }}</td>
+
+                    <td>
+                        {% if meter.online %}
+                            <i class="fa fa-circle text-green"></i>
+                        {% else %}
+                            <i class="fa fa-circle text-danger"></i>
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        {% if meter.power %}
+                            <i class="fa fa-power-off text-green"></i>
+                        {% else %}
+                            <i class="fa fa-power-off text-danger"></i>
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {{ items.paginate(meters) }}
+    {% endif %}
+{% endblock %}

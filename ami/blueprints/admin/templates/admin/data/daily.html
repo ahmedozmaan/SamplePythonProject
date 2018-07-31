@@ -1,0 +1,71 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Admin - Daily Data  / List{% endblock %}
+
+{% block body %}
+    <div class="col-md-12 well">
+        <legend>Daily Data</legend>
+        {{ f.data_search('admin.data_daily', form) }}
+    </div>
+    {% if data.total == 0 %}
+        <h3>No results found</h3>
+        {% if request.args.get('q') or request.args.get('start') or request.args.get('end') %}
+            <p>Try limiting or removing your search terms.</p>
+        {% else %}
+            <p>There are no daily data present
+        {% endif %}
+    {% else %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="col-header">
+                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('meter.serial_number', 'Serial Number') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('active_increase', 'Active Increase') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('total_active', 'Total Active') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('import_active', 'Import Active') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('export_active', 'Export Active') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('import_apparent', 'Import Apparent') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('export_apparent', 'Export Apparent') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('capture_time', 'Time') }}
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for daily in data.items %}
+                <tr>
+                    <td>{{ daily.meter.sequence_number }}</td>
+                    <td>{{ daily.meter.serial_number }}</td>
+                    <td>{{ daily.active_increase }}</td>
+                    <td>{{ daily.total_active }}</td>
+                    <td>{{ daily.import_active }}</td>
+                    <td>{{ daily.export_active }}</td>
+                    <td>{{ daily.import_apparent }}</td>
+                    <td>{{ daily.export_apparent }}</td>
+                    <td>{{ daily.capture_time }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ items.paginate(data) }}
+    {% endif %}
+{% endblock %}

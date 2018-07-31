@@ -1,0 +1,55 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Admin - Data Alerts / List{% endblock %}
+
+{% block body %}
+    <div class="col-md-12 well">
+        <legend>Alert Data</legend>
+        {{ f.data_search('admin.data_alert', form) }}
+    </div>
+    {% if data.total == 0 %}
+        <h3>No results found</h3>
+        {% if request.args.get('q') or request.args.get('start') or request.args.get('end') %}
+            <p>Try limiting or removing your search terms.</p>
+        {% else %}
+            <p>There are no alerts present
+        {% endif %}
+    {% else %}
+        <table class="table table-bordered table-striped">
+        {#<table class="table table-striped">#}
+            <thead>
+            <tr>
+                <th class="col-header">
+                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('meter.serial_number', 'Serial Number') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('name', 'ALert Name') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('code', 'Alert Code') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('capture_time', 'Alert Time') }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alert in data.items %}
+                <tr>
+                    <td>{{ alert.meter.sequence_number }}</td>
+                    <td>{{ alert.meter.serial_number }}</td>
+                    <td>{{ alert.name }}</td>
+                    <td>{{ alert.code }}</td>
+                    <td>{{ alert.capture_time }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ items.paginate(data) }}
+    {% endif %}
+{% endblock %}

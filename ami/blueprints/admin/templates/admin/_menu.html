@@ -1,0 +1,24 @@
+<li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+<li role="separator" class="divider"></li>
+<li><a href="{{ url_for('admin.meters') }}">Meters</a></li>
+<li role="separator" class="divider"></li>
+<li><a href="{{ url_for('admin.users') }}">Users</a></li>
+<li class="dropdown">
+      <a href="#" class="dropdown-toggle"
+         data-toggle="dropdown"
+         role="button" aria-haspopup="true"
+         aria-expanded="false">Meter Data
+        <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="{{ url_for('admin.data_demand') }}">Demand Data</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="{{ url_for('admin.data_alert') }}">Alert Data</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="{{ url_for('admin.data_hourly') }}">Hourly Data</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="{{ url_for('admin.data_daily') }}">Daily Data</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="{{ url_for('admin.data_monthly') }}">Monthly Data</a></li>
+      </ul>
+</li>
+

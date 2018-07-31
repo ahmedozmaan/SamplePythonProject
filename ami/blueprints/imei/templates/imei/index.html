@@ -1,0 +1,44 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+{% import 'macros/user.html' as account %}
+
+{% block title %}Admin - Users / List{% endblock %}
+
+{% block body %}
+  {{ f.search('admin.imei') }}
+
+  {% if data.total == 0 %}
+    <h3>No results found</h3>
+
+    {% if request.args.get('q') %}
+      <p>Try limiting or removing your search terms.</p>
+    {% else %}
+      <p>There are no imei present,
+         you should load data from file first.</p>
+    {% endif %}
+  {% else %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="col-header">
+              {{ items.sort('meter_identifier', 'Meter') }}
+            </th>
+            <th class="col-header">
+              {{ items.sort('modem_imei', 'Imei') }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for imei in data.items %}
+          <tr>
+            <td>{{ imei.meter_identifier }}</td>
+            <td>{{ imei.modem_imei }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+    {{ items.paginate(data) }}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Admin - Meter / Add{% endblock %}
+
+{% block body %}
+  <div class="row">
+    <div class="col-md-12 well">
+      {% call f.form_tag('admin.meters_add') %}
+        <legend>Register New Meter</legend>
+        <div class="row">
+          <div class="col-md-4">
+               {% call f.form_group(form.sequence_number, css_class='sm-margin-bottom',
+                             autofocus='autofocus') %}
+               {% endcall %}
+          </div>
+          <div class="col-md-4">
+            {% call f.form_group(form.serial_number, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+          <div class="col-md-4">
+            {% call f.form_group(form.phone_number, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            {% call f.form_group(form.customer_name, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+          <div class="col-md-4">
+            {% call f.form_group(form.branch, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+          <div class="col-md-4">
+            {% call f.form_group(form.zone, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            {% call f.form_group(form.hes, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+          <div class="col-md-4">
+            {% call f.form_group(form.initial_reading, css_class='sm-margin-bottom') %}
+            {% endcall %}
+          </div>
+          <div class="col-md-4">
+             {% call f.form_group(form.lat_long, css_class='sm-margin-bottom') %}
+             {% endcall %}
+          </div>
+        </div>
+        {% call f.form_group(form.active, css_class='sm-margin-bottom') %}
+        {% endcall %}
+
+        <div class="row">
+          <div class="col-md-3 pull-right">
+            <button type="submit" class="btn btn-primary btn-block">
+              Save
+            </button>
+          </div>
+          <div class="col-md-3 pull-right">
+            <div class="visible-xs visible-sm sm-margin-top"></div>
+            <a href="{{ url_for('admin.meters') }}"
+               class="btn btn-default btn-block">
+              Cancel
+            </a>
+          </div>
+        </div>
+      {% endcall %}
+    </div>
+  </div>
+{% endblock %}

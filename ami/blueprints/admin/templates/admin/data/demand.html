@@ -1,0 +1,110 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Admin - Demand Data / List{% endblock %}
+
+{% block body %}
+    <div class="col-md-12 well">
+        <legend>Demand Data</legend>
+        {{ f.data_search('admin.data_demand', form) }}
+    </div>
+    {% if data.total == 0 %}
+        <h3>No results found</h3>
+        {% if request.args.get('q') or request.args.get('start') or request.args.get('end') %}
+            <p>Try limiting or removing your search terms.</p>
+        {% else %}
+            <p>There are no demand data present
+        {% endif %}
+    {% else %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="col-header">
+                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('meter.serial_number', 'Serial Number') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('total_active', 'Total Active') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('import_active', 'Import Active') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('export_active', 'Export Active') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('import_apparent', 'Import Apparent') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('export_apparent', 'Export Apparent') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('power_on_duration', 'Power On Duration') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('voltage_x', 'Voltage Phase 1') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('voltage_y', 'Voltage Phase 2') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('voltage_z', 'Voltage Phase 3') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('current_x', 'Current Phase') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('current_y', 'Current Phase') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('current_z', 'Current Phase') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('current_neutral', 'Current Neutral') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('reactive_power', 'Reactive Power') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('apparent_power', 'Apparent Power') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('active_power', 'Active Power') }}
+                </th>
+                <th class="col-header">
+                    {{ items.sort('capture_time', 'Time') }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alert in data.items %}
+                <tr>
+                    <td>{{ alert.meter.sequence_number }}</td>
+                    <td>{{ alert.meter.serial_number }}</td>
+                    <td>{{ alert.total_active }}</td>
+                    <td>{{ alert.import_active }}</td>
+                    <td>{{ alert.export_active }}</td>
+                    <td>{{ alert.import_apparent }}</td>
+                    <td>{{ alert.export_apparent }}</td>
+                    <td>{{ alert.power_on_duration }}</td>
+                    <td>{{ alert.voltage_x }}</td>
+                    <td>{{ alert.voltage_y }}</td>
+                    <td>{{ alert.voltage_z }}</td>
+                    <td>{{ alert.current_x }}</td>
+                    <td>{{ alert.current_y }}</td>
+                    <td>{{ alert.current_z }}</td>
+                    <td>{{ alert.current_neutral }}</td>
+                    <td>{{ alert.reactive_power }}</td>
+                    <td>{{ alert.apparent_power }}</td>
+                    <td>{{ alert.active_power }}</td>
+                    <td>{{ alert.capture_time }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ items.paginate(data) }}
+    {% endif %}
+{% endblock %}
