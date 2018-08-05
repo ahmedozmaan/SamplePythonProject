@@ -145,7 +145,7 @@ def seed_alert():
 
 def seed_imei():
     data = []
-    wb = load_workbook(filename='IMEI number CL710K22.xlsx', read_only=True)
+    wb = load_workbook(filename='data/IMEI number CL710K22.xlsx', read_only=True)
     click.echo(wb.sheetnames)
 
     for sheet in wb.sheetnames:
@@ -162,7 +162,7 @@ def seed_imei():
                 }
                 data.append(params)
 
-    wb = load_workbook(filename='IMEI number CL730S22.xlsx', read_only=True)
+    wb = load_workbook(filename='data/IMEI number CL730S22.xlsx', read_only=True)
     for sheet in wb.sheetnames:
         ws = wb[sheet]
         for row in ws.rows:
@@ -182,14 +182,14 @@ def seed_imei():
 
 def seed_sim():
     data = []
-    wb = load_workbook(filename='Beco Numbers.xlsx', read_only=True)
+    wb = load_workbook(filename='data/Beco Numbers.xlsx', read_only=True)
     click.echo(wb.sheetnames)
     for sheet in wb.sheetnames:
         ws = wb[sheet]
         for row in ws.rows:
             if row[1].value and row[1].value != "MSISDN":
                 params = {
-                    'phone_number': str(row[1].value),
+                    'phone_number': "00252"+str(row[1].value),
                     'sim_serial': str(row[2].value)
                 }
                 data.append(params)
