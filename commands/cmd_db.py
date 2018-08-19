@@ -177,7 +177,6 @@ def seed_imei():
                 }
                 data.append(params)
     return _bulk_insert(Imei, data, 'imei')
-    return None
 
 
 def seed_sim():
@@ -236,7 +235,6 @@ def _bulk_insert(model, data, label):
         model.query.delete()
         db.session.commit()
         db.engine.execute(model.__table__.insert(), data)
-
         _log_status(model.query.count(), label)
 
     return None

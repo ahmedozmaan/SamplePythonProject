@@ -27,8 +27,13 @@ SECRET_KEY = 'insecurekeyfordev'
 #db_uri = 'postgresql://snakeeyes:devpassword@postgres:5432/snakeeyes'
 db_uri = 'mysql://development:development@localhost/myami'
 
-SQLALCHEMY_DATABASE_URI = db_uri
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+SQLALCHEMY_DATABASE_URI = db_uri
+SQLALCHEMY_BINDS = {
+    'myami':        db_uri,
+    'ami':      'mysql://development:development@localhost/ami'
+}
 
 # User.
 SEED_ADMIN_EMAIL = 'ahmed@local.host'

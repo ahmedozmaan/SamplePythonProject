@@ -33,3 +33,6 @@ fake-factory==0.5.7
 flask-debugtoolbar==0.10.0
 #Flask-Mail==0.9.1
 Flask-Login==0.3.2
+
+#https://stackoverflow.com/questions/5631078/sqlalchemy-print-the-actual-query
+sqlparse

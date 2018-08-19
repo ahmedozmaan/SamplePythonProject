@@ -21,46 +21,39 @@
             <thead>
             <tr>
                 <th class="col-header">
-                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
+                    {{ items.sort('capture_time', 'Data Time') }}
                 </th>
                 <th class="col-header">
                     {{ items.sort('meter.serial_number', 'Serial Number') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('import_active', 'Import Active') }}
+                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('export_active', 'Export Active') }}
+                    {{ items.sort('block_import_active', 'Import Active') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('import_apparent', 'Import Apparent') }}
+                    {{ items.sort('block_export_active', 'Export Active') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('export_apparent', 'Export Apparent') }}
+                    {{ items.sort('block_import_apparent', 'Import Apparent') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('import_reactive', 'Import Reactive') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('export_reactive', 'Export Reactive') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('capture_time', 'Data Time') }}
+                    {{ items.sort('block_export_apparent', 'Export Apparent') }}
                 </th>
             </tr>
             </thead>
             <tbody>
-            {% for alert in data.items %}
+            {% for x in data.items %}
                 <tr>
-                    <td>{{ alert.meter.sequence_number }}</td>
-                    <td>{{ alert.meter.serial_number }}</td>
-                    <td>{{ daily.import_active }}</td>
-                    <td>{{ daily.export_active }}</td>
-                    <td>{{ daily.import_apparent }}</td>
-                    <td>{{ daily.export_apparent }}</td>
-                    <td>{{ daily.import_reactive }}</td>
-                    <td>{{ daily.export_reactive }}</td>
-                    <td>{{ daily.capture_time }}</td>
+
+                    <td>{{ x.capture_time }}</td>
+                    <td>{{ x.meter.serial_number }}</td>
+                    <td>{{ x.meter.sequence_number }}</td>
+                    <td>{{ x.block_import_active }}</td>
+                    <td>{{ x.block_export_active }}</td>
+                    <td>{{ x.block_import_apparent }}</td>
+                    <td>{{ x.block_export_apparent }}</td>
                 </tr>
             {% endfor %}
             </tbody>

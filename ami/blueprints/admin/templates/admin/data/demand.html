@@ -20,87 +20,35 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th class="col-header">
-                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
+                 <th class="col-header">
+                    {{ items.sort('capture_time', 'Data Time') }}
                 </th>
                 <th class="col-header">
                     {{ items.sort('meter.serial_number', 'Serial Number') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('total_active', 'Total Active') }}
+                    {{ items.sort('meter.sequence_number', 'Sequence Number') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('import_active', 'Import Active') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('export_active', 'Export Active') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('import_apparent', 'Import Apparent') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('export_apparent', 'Export Apparent') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('power_on_duration', 'Power On Duration') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('voltage_x', 'Voltage Phase 1') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('voltage_y', 'Voltage Phase 2') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('voltage_z', 'Voltage Phase 3') }}
+                    {{ items.sort('voltage_x', 'Voltage Phase') }}
                 </th>
                 <th class="col-header">
                     {{ items.sort('current_x', 'Current Phase') }}
                 </th>
                 <th class="col-header">
-                    {{ items.sort('current_y', 'Current Phase') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('current_z', 'Current Phase') }}
-                </th>
-                <th class="col-header">
                     {{ items.sort('current_neutral', 'Current Neutral') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('reactive_power', 'Reactive Power') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('apparent_power', 'Apparent Power') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('active_power', 'Active Power') }}
-                </th>
-                <th class="col-header">
-                    {{ items.sort('capture_time', 'Time') }}
                 </th>
             </tr>
             </thead>
             <tbody>
-            {% for alert in data.items %}
+            {% for x in data.items %}
                 <tr>
-                    <td>{{ alert.meter.sequence_number }}</td>
-                    <td>{{ alert.meter.serial_number }}</td>
-                    <td>{{ alert.total_active }}</td>
-                    <td>{{ alert.import_active }}</td>
-                    <td>{{ alert.export_active }}</td>
-                    <td>{{ alert.import_apparent }}</td>
-                    <td>{{ alert.export_apparent }}</td>
-                    <td>{{ alert.power_on_duration }}</td>
-                    <td>{{ alert.voltage_x }}</td>
-                    <td>{{ alert.voltage_y }}</td>
-                    <td>{{ alert.voltage_z }}</td>
-                    <td>{{ alert.current_x }}</td>
-                    <td>{{ alert.current_y }}</td>
-                    <td>{{ alert.current_z }}</td>
-                    <td>{{ alert.current_neutral }}</td>
-                    <td>{{ alert.reactive_power }}</td>
-                    <td>{{ alert.apparent_power }}</td>
-                    <td>{{ alert.active_power }}</td>
-                    <td>{{ alert.capture_time }}</td>
+                    <td>{{ x.capture_time }}</td>
+                    <td>{{ x.meter.serial_number }}</td>
+                    <td>{{ x.meter.sequence_number }}</td>
+                    <td>{{ x.voltage_x }}</td>
+                    <td>{{ x.current_x }}</td>
+                    <td>{{ x.current_neutral }}</td>
                 </tr>
             {% endfor %}
             </tbody>

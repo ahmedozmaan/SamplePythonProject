@@ -13,7 +13,7 @@ from ami.blueprints.admin.models import Dashboard
 from ami.blueprints.user.decorators import role_required
 from ami.blueprints.user.models import User
 from ami.blueprints.meter.models import Meter
-from ami.blueprints.imei.models import Imei,Sim
+from ami.blueprints.imei.models import Imei, Sim
 
 from ami.blueprints.data.models import (
     HourlyData,
@@ -263,6 +263,7 @@ def data_demand(page):
     paginated_data = DemandData.query \
         .filter(DemandData.query_search(request.args.get('q', ''))) \
         .filter(DemandData.date_search(request.args.get('start', ''), request.args.get('end', ''))) \
+        .join(Meter, Meter.id == DemandData.meter_id)\
         .order_by(text(order_values)) \
         .paginate(page, 50, True)
 
@@ -299,6 +300,7 @@ def data_hourly(page):
     paginated_data = HourlyData.query \
         .filter(HourlyData.query_search(request.args.get('q', ''))) \
         .filter(HourlyData.date_search(request.args.get('start', ''), request.args.get('end', ''))) \
+        .join(Meter, Meter.id == HourlyData.meter_id)\
         .order_by(text(order_values)) \
         .paginate(page, 50, True)
 
@@ -317,6 +319,7 @@ def data_daily(page):
     paginated_data = DailyData.query \
         .filter(DailyData.query_search(request.args.get('q', ''))) \
         .filter(DailyData.date_search(request.args.get('start', ''), request.args.get('end', ''))) \
+        .join(Meter, Meter.id == DailyData.meter_id)\
         .order_by(text(order_values)) \
         .paginate(page, 50, True)
 
@@ -335,9 +338,30 @@ def data_monthly(page):
     paginated_data = MonthlyData.query \
         .filter(MonthlyData.query_search(request.args.get('q', ''))) \
         .filter(MonthlyData.date_search(request.args.get('start', ''), request.args.get('end', ''))) \
+        .join(Meter, Meter.id == MonthlyData.meter_id)\
         .order_by(text(order_values)) \
         .paginate(page, 50, True)
 
     return render_template('admin/data/monthly.html',
                            form=DataSearchForm(),
                            data=paginated_data)
+
+
+def prettyprintable(statement, dialect=None, reindent=True):
+    """Generate an SQL expression string with bound parameters rendered inline
+    for the given SQLAlchemy statement. The function can also receive a
+    `sqlalchemy.orm.Query` object instead of statement.
+    can
+
+    WARNING: Should only be used for debugging. Inlining parameters is not
+             safe when handling user created data.
+    """
+    import sqlparse
+    import sqlalchemy.orm
+    if isinstance(statement, sqlalchemy.orm.Query):
+        if dialect is None:
+            dialect = statement.session.get_bind().dialect
+        statement = statement.statement
+    compiled = statement.compile(dialect=dialect,
+                                 compile_kwargs={'literal_binds': True})
+    return sqlparse.format(str(compiled), reindent=reindent)
