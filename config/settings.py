@@ -25,7 +25,8 @@ SECRET_KEY = 'insecurekeyfordev'
 
 # SQLAlchemy.
 #db_uri = 'postgresql://snakeeyes:devpassword@postgres:5432/snakeeyes'
-db_uri = 'mysql://development:development@localhost/myami'
+#db_uri = 'mysql://development:development@localhost/myami'
+db_uri ='mysql://root:ali12.,ali@localhost/myami'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 

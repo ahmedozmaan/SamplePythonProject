@@ -13,7 +13,7 @@ class DailyData(ResourceMixin, db.Model):
                                                    onupdate='CASCADE',
                                                    ondelete='CASCADE'), unique=True,
                          index=True, nullable=False)
-    meter = db.relationship(Meter, uselist=False, backref='daily_data',
+    meter = db.relationship(Meter, uselist=False, backref='daily_data_',
                             passive_deletes=True)
     capture_time = db.Column(db.TIMESTAMP, default=tzware_datetime, unique=True)
     active_increase = db.Column(db.String(25), nullable=False, server_default='')
@@ -85,6 +85,19 @@ class DailyData(ResourceMixin, db.Model):
                           DailyData.capture_time <= end_date)
             return and_(*date_chain)
         return ''
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'meter_id': self.meter_id,
+            'active_increase': self.active_increase,
+            'total_active': self.total_active,
+            'import_active':self.import_active,
+            'export_active':self.export_active,
+            'sequence_number': self.meter.sequence_number,
+            'capture_time': self.capture_time,
+        }
 
 
 class HourlyData(ResourceMixin, db.Model):
@@ -162,7 +175,20 @@ class HourlyData(ResourceMixin, db.Model):
                           HourlyData.capture_time <= end_date)
             return and_(*date_chain)
         return ''
-
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'meter_id': self.meter_id,
+            'import_active': self.block_import_active,
+            'export_active': self.block_export_active,
+            'import_reactive':self.block_import_reactive,
+            'export_reactive':self.block_export_reactive,
+            'import_apparent':self.block_import_apparent,
+            'bexport_apparent':self.block_export_apparent,
+            'sequence_number': self.meter.sequence_number,
+            'capture_time': self.capture_time,
+        }
 
 class DemandData(ResourceMixin, db.Model):
     __tablename__ = 'demand_data_'
@@ -368,6 +394,22 @@ class MonthlyData(ResourceMixin, db.Model):
             return and_(*date_chain)
         return ''
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'meter_id': self.meter_id,
+            'active_increase': self.monthly_active_increase,
+            'total_active': self.total_active,
+            'import_active': self.import_active,
+            'export_active': self.export_active,
+            'import_reactive':self.import_reactive,
+            'export_reactive':self.export_reactive,
+            'import_apparent':self.total_import_apparent,
+            'export_apparent':self.total_export_apparent,
+            'sequence_number': self.meter.sequence_number,
+            'capture_time': self.capture_time,
+        }
 
 def set_value(self, obis, value):
         if obis == "1.0.1.8.0.255":
@@ -459,5 +501,6 @@ class AlertData(ResourceMixin, db.Model):
             'meter_id': self.meter_id,
             'code': self.code,
             'name': self.name,
+            'sequence_number': self.meter.sequence_number,
             'capture_time': self.capture_time,
         }

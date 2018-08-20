@@ -282,6 +282,7 @@ def data_alert(page):
     paginated_data = AlertData.query \
         .filter(AlertData.query_search(request.args.get('q', ''))) \
         .filter(AlertData.date_search(request.args.get('start', ''), request.args.get('end', ''))) \
+        .join(Meter, Meter.id == AlertData.meter_id)\
         .order_by(text(order_values)) \
         .paginate(page, 50, True)
 

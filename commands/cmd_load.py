@@ -5,7 +5,7 @@ from faker import Faker
 from ami.app import create_app
 from ami.extensions import db
 from ami.blueprints.meter.models import Meter
-from ami.blueprints.data.models import DailyData, HourlyData, MonthlyData, DemandData
+from ami.blueprints.data.models import DailyData, HourlyData, MonthlyData, DemandData, AlertData
 from ami.blueprints.load.models import LoadMeter, LoadDaily, LoadHourly, LoadMonthly, LoadDemand
 
 # Create an app context for the database connection.
@@ -84,6 +84,28 @@ def meters():
         }
         data.append(params)
     return _bulk_insert(Meter, data, 'meter')
+
+@click.command()
+def loadalert():
+    """
+    Generate fake users.
+    """
+    sql = str("""select meter_id ,created_at,alert_name,alert_code	from	ami.alert,	ami.alert_type,	ami.meter
+          where	alert.alert_id	=	ami.alert_type.id  and	alert.meter_id	=	ami.meter.id""")
+    result = db.engine.execute(sql)
+    data = []
+    names = []
+    for row in result:
+        params = {
+                'meter_id': row[0],
+                'capture_time': row[1],
+                'name': row[2],
+                'code': row[3],
+                }
+        data.append(params)
+
+    return _bulk_insert(AlertData, data, 'alerts')
+
 
 
 @click.command()
@@ -261,3 +283,4 @@ def all(ctx):
 
 
 cli.add_command(all)
+cli.add_command(loadalert)
