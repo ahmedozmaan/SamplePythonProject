@@ -28,7 +28,7 @@ $(document).ready(function () {
     });
 
     if(document.getElementById("myChart")) {
- 
+
         var ctx = document.getElementById("myChart").getContext('2d');
 
         var myChart = new Chart(ctx, {
@@ -59,23 +59,29 @@ $(document).ready(function () {
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var target = $(e.target).attr("href"); // activated tab
         var $tab;
+        var links;
         if (target === "#demand") {
             target = 0;
             $tab = $("#demandtb")
+            links="demand"
         } else if (target === "#alerts") {
             target = 1;
             $tab = $('#alertstb')
+            links="alert"
         } else if (target === "#hourly") {
             target = 2;
             $tab = $("#hourlytb")
+            links="hourly"
         } else if (target === "#daily") {
             target = 3;
             $tab = $("#dailytb")
+            links="daily"
         } else if (target === "#monthly") {
             target = 4;
             $tab = $("#monthlytb")
+            links="monthly"
         }
-        getMeterData(csrfToken, target, $tab)
+        getMeterData(csrfToken, target, $tab,links)
 
     });
     var $start = $("#start");
@@ -163,7 +169,7 @@ $(document).ready(function () {
 });
 
 
-function getMeterData(csrfToken, dataType, $tab) {
+function getMeterData(csrfToken, dataType, $tab,links) {
     //https://stackoverflow.com/questions/4758103/last-segment-of-url
     var id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
     $.ajax({
@@ -175,12 +181,60 @@ function getMeterData(csrfToken, dataType, $tab) {
         }
     }).done(function (data, status, xhr) {
         var tr = [];
-        for (var i = 0; i < data.length; i++) {
-            tr.push('<tr>');
-            tr.push("<td>" + moment(data[i].capture_time).format('YYYY-MM-DD h:mm:ss') + "</td>");
-            tr.push("<td>" + data[i].name + "</td>");
-            tr.push("<td>" + data[i].code + "</td>");
-            tr.push('</tr>');
+        if(dataType==1){
+          for (var i = 0; i < data.length; i++) {
+              tr.push('<tr>');
+              tr.push("<td>" + moment(data[i].capture_time).format('YYYY-MM-DD h:mm:ss') + "</td>");
+              tr.push("<td>" + data[i].name + "</td>");
+              tr.push("<td>" + data[i].code + "</td>");
+              tr.push('</tr>');
+              id = data[i].sequence_number
+          }
+        } else if(dataType==2)
+        {
+            for (var i = 0; i < data.length; i++)
+            {
+                tr.push('<tr>');
+                tr.push("<td>" + moment(data[i].capture_time).format('YYYY-MM-DD h:mm:ss') + "</td>");
+                tr.push("<td>" + data[i].import_active + "</td>");
+                tr.push("<td>" + data[i].export_active + "</td>");
+                tr.push("<td>" + data[i].import_reactive + "</td>");
+                tr.push("<td>" + data[i].export_reactive+ "</td>");
+                tr.push("<td>" + data[i].import_apparent + "</td>");
+                tr.push("<td>" + data[i].export_apparent+ "</td>");
+                tr.push('</tr>');
+                id = data[i].sequence_number
+            }
+        } else if(dataType==3)
+        {
+          for (var i = 0; i < data.length; i++)
+          {
+              tr.push('<tr>');
+              tr.push("<td>" + moment(data[i].capture_time).format('YYYY-MM-DD h:mm:ss') + "</td>");
+              tr.push("<td>" + data[i].active_increase + "</td>");
+              tr.push("<td>" + data[i].total_active + "</td>");
+              tr.push("<td>" + data[i].import_active + "</td>");
+              tr.push("<td>" + data[i].export_active+ "</td>");
+              tr.push('</tr>');
+              id = data[i].sequence_number
+          }
+        } else if(dataType==4)
+        {
+          for (var i = 0; i < data.length; i++)
+          {
+              tr.push('<tr>');
+              tr.push("<td>" + moment(data[i].capture_time).format('YYYY-MM-DD h:mm:ss') + "</td>");
+              tr.push("<td>" + data[i].active_increase + "</td>");
+              tr.push("<td>" + data[i].total_active + "</td>");
+              tr.push("<td>" + data[i].import_active + "</td>");
+              tr.push("<td>" + data[i].export_active + "</td>");
+              tr.push("<td>" + data[i].import_reactive + "</td>");
+              tr.push("<td>" + data[i].export_reactive+ "</td>");
+              tr.push("<td>" + data[i].import_apparent + "</td>");
+              tr.push("<td>" + data[i].export_apparent+ "</td>");
+              tr.push('</tr>');
+              id = data[i].sequence_number
+          }
         }
         var colCount = 0;
         $tab.find('tr:first th').each(function () {
@@ -191,7 +245,7 @@ function getMeterData(csrfToken, dataType, $tab) {
             }
         });
         tr.push('<tr>');
-        tr.push("<td colspan=" + colCount + " align='center'> <a href='/admin/data/alert'>Show More</a> </td>");
+        tr.push("<td colspan=" + colCount + " align='center'> <a href='/admin/data/"+links+"?q="+id+"'>Show More</a> </td>");
         tr.push('</tr>');
 
         $tab.children().eq(1).children().remove();
@@ -214,7 +268,7 @@ function getMeterData(csrfToken, dataType, $tab) {
 
         var tr = [];
         tr.push('<tr>');
-        tr.push("<td colspan=" + colCount + " align='center'> <a href='/admin/data/alert'>No Data Found</a> </td>");
+        tr.push("<td colspan=" + colCount + " align='center'> <a href='/admin/data/"+links+">No Data Found</a> </td>");
         tr.push('</tr>');
 
         $tab.children().eq(1).children().remove();
@@ -228,4 +282,3 @@ function getMeterData(csrfToken, dataType, $tab) {
 
     });
 }
-
